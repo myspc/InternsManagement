@@ -1,9 +1,14 @@
 package um5.fmp.stages.gestion_stages.services;
 
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import um5.fmp.stages.gestion_stages.models.Admin;
@@ -45,43 +50,51 @@ public class AdminServiceImpl implements AdminService {
 	StageRepository stageRepo;
 
 	@Override
-	public List<Etudiant> listEtudiant() {
-		return etudiantRepo.findAll();
+	public List<Etudiant> listEtudiant(int  page) {
+		Pageable p = PageRequest.of(page,10);
+		return etudiantRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Encadrant> listEncadrant() {
-		return encadrantRepo.findAll();
+	public List<Encadrant> listEncadrant(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return encadrantRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Admin> listAdmin() {
-		return adminRepo.findAll();
+	public List<Admin> listAdmin(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return adminRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Stage> listStage() {
-		return stageRepo.findAll();
+	public List<Stage> listStage(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return stageRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Annonce> listAnnonce() {
-		return annonceRepo.findAll();
+	public List<Annonce> listAnnonce(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return annonceRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Document> listDocuments() {
-		return documentRepo.findAll();
+	public List<Document> listDocuments(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return documentRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<EmplacementStage> listEmplacement() {
-		return emplacementStageRepo.findAll();
+	public List<EmplacementStage> listEmplacement(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return emplacementStageRepo.findAll(p).toList();
 	}
 
 	@Override
-	public List<Niveau> listNiveau() {
-		return niveauRepo.findAll();
+	public List<Niveau> listNiveau(int page) {
+		Pageable p = PageRequest.of(page,10);
+		return niveauRepo.findAll(p).toList();
 	}
 
 	@Override

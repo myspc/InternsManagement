@@ -1,8 +1,11 @@
 package um5.fmp.stages.gestion_stages.controllers;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,38 +35,39 @@ public class AdminController {
 	AdminService adminService;
 	//afficher les entites:
 	
-	@GetMapping("/etudiants")
-	public List<Etudiant> listEtudiant() {
-		return adminService.listEtudiant();
+	@GetMapping("/etudiants/{page}")
+	public List<Etudiant> listEtudiant(@PathVariable int page) {
+		
+		return adminService.listEtudiant(page);
 	}
 	
-	@GetMapping("/encadrants")
-	public List<Encadrant> listEncadrant() {
-		return adminService.listEncadrant();
+	@GetMapping("/encadrants/{page}")
+	public List<Encadrant> listEncadrant(@PathVariable int page) {
+		return adminService.listEncadrant(page);
 	}
-	@GetMapping("/administrateurs")
-	public List<Admin> listAdmin() {
-		return adminService.listAdmin();
+	@GetMapping("/administrateurs/{page}")
+	public List<Admin> listAdmin(@PathVariable int page) {
+		return adminService.listAdmin(page);
 	}
-	@GetMapping("/stages")
-	public List<Stage> listStage() {
-		return adminService.listStage();
+	@GetMapping("/stages/{page}")
+	public List<Stage> listStage(@PathVariable int page) {
+		return adminService.listStage(page);
 	}
-	@GetMapping("/annonces")
-	public List<Annonce> listAnnonce() {
-		return adminService.listAnnonce();
+	@GetMapping("/annonces/{page}")
+	public List<Annonce> listAnnonce(@PathVariable int page) {
+		return adminService.listAnnonce(page);
 	}
-	@GetMapping("/documents")
-	public List<Document> listDocuments() {
-		return adminService.listDocuments();
+	@GetMapping("/documents/{page}")
+	public List<Document> listDocuments(@PathVariable int page) {
+		return adminService.listDocuments(page);
 	}
-	@GetMapping("/emplacements")
-	public List<EmplacementStage> listEmplacement() {
-		return adminService.listEmplacement();
+	@GetMapping("/emplacements/{page}")
+	public List<EmplacementStage> listEmplacement(@PathVariable int page) {
+		return adminService.listEmplacement(page);
 	}
-	@GetMapping("/niveau")
-	public List<Niveau> listNiveau() {
-		return adminService.listNiveau();
+	@GetMapping("/niveau/{page}")
+	public List<Niveau> listNiveau(@PathVariable int page) {
+		return adminService.listNiveau(page);
 	}
 	
 	//find by id:
@@ -191,25 +195,25 @@ public class AdminController {
 	public void assignStudent(@PathVariable long idStudent, @PathVariable long idNiveau) {
 		adminService.assignLevelToStudent(idStudent, idNiveau);
 	}
-	@PostMapping("/encadrant/assign")
-	public void assignTeacher(@RequestAttribute long idTeacher, @RequestAttribute long idNiveau) {
+	@GetMapping("/encadrant/assign/{idTeacher}/{idNiveau}")
+	public void assignTeacher(@PathVariable long idTeacher, @PathVariable long idNiveau) {
 		adminService.assignLevelToTeacher(idTeacher, idNiveau);
 	}
-	@PostMapping("/stage/assign")
-	public void assignStage(@RequestAttribute long idStage, @RequestAttribute long idNiveau) {
+	@GetMapping("/stage/assign/{idStage}/{idNiveau}")
+	public void assignStage(@PathVariable long idStage, @PathVariable long idNiveau) {
 		adminService.assignLevelToStage(idStage, idNiveau);
 	}
 	//unassign entities:
-	@PostMapping("/etudiant/unassign")
-	public void unassignEtudiant(@RequestAttribute long idEtudiant) {
+	@GetMapping("/etudiant/unassign/{idEtudiant}")
+	public void unassignEtudiant(@PathVariable long idEtudiant) {
 		adminService.removeLevelStudent(idEtudiant);
 	}
-	@PostMapping("/encadrant/unassign")
-	public void unassignEncadrant(@RequestAttribute long idEncadrant) {
+	@GetMapping("/encadrant/unassign/{idEncadrant}")
+	public void unassignEncadrant(@PathVariable long idEncadrant) {
 		adminService.removeLevelTeacher(idEncadrant);
 	}
-	@PostMapping("/niveau/unassign")
-	public void unassignNiveau(@RequestAttribute long idNiveau,@RequestAttribute long idStage ) {
+	@GetMapping("/niveau/unassign/{idNiveau}/{idStage}")
+	public void unassignNiveau(@PathVariable long idNiveau,@PathVariable long idStage ) {
 		adminService.removeLevelStage(idStage, idNiveau);
 	}
 

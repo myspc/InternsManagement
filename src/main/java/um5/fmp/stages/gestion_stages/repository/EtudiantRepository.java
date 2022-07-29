@@ -1,10 +1,12 @@
 package um5.fmp.stages.gestion_stages.repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +17,8 @@ import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 
 @Repository
-public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
-
+public interface EtudiantRepository extends JpaRepository<Etudiant, Long> /*extends PagingAndSortingRepository<Etudiant, Long> */{
+   
 	//Consulter la liste des étudiants de son niveau
 	@Query(value="select e from Etudiant e where e.niveau.id=:id")
 	List<Etudiant> getListEtudiantSameNiveau(@Param("id")Long id);
@@ -42,6 +44,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
     @Query("Select e From Etudiant e Where e.niveau = :niveau")
     List<Etudiant> getStudents(Niveau niveau);
+
+	
 
  }
 
