@@ -1,7 +1,10 @@
 package um5.fmp.stages.gestion_stages.services;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
@@ -15,14 +18,14 @@ import um5.fmp.stages.gestion_stages.models.Stage;
 public interface AdminService {
 	//afficher les entites:
 	
-	public List<Etudiant> listEtudiant();
-	public List<Encadrant> listEncadrant();
-	public List<Admin> listAdmin();
-	public List<Stage> listStage();
-	public List<Annonce> listAnnonce();
-	public List<Document> listDocuments();
-	public List<EmplacementStage> listEmplacement();
-	public List<Niveau> listNiveau();
+	public List<Etudiant> listEtudiant(int page);
+	public List<Encadrant> listEncadrant(int page);
+	public List<Admin> listAdmin(int page);
+	public List<Stage> listStage(int page);
+	public List<Annonce> listAnnonce(int page);
+	public List<Document> listDocuments(int page);
+	public List<EmplacementStage> listEmplacement(int page);
+	public List<Niveau> listNiveau(int page);
 	
 /*--------------------------------------------------------------------------------
 	findbyID*/
@@ -44,6 +47,7 @@ public interface AdminService {
 	public Boolean ajouterStage(Stage s);
 	public Boolean ajouterAnnonce(Annonce a);
 	public Boolean ajouterEmplacement(EmplacementStage e);
+	 public Boolean ajouterNiveau(Niveau s);
 	
 
 /*---------------------------------------------------------------------------------
