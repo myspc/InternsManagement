@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
@@ -14,20 +17,28 @@ import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Stage;
 import um5.fmp.stages.gestion_stages.repository.AffectationRepository;
+import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.repository.EncadrantRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
+import um5.fmp.stages.gestion_stages.repository.UserRepository;
 
 @Service
 public class EncadrantServiceImpl implements EncadrantService {
 
     @Autowired
     EncadrantRepository encadrantRepo;
+    
+    @Autowired
+    UserRepository userRepo;
 
     @Autowired
     EtudiantRepository etudiantRepo;
 
     @Autowired
     AffectationRepository affectationRepo;
+    
+    @Autowired
+    EmplacementStageRepository emplacementRepo;
 
     public Boolean add(Encadrant encadrant) {
         try {
@@ -49,14 +60,22 @@ public class EncadrantServiceImpl implements EncadrantService {
     }
 
     @Override
-    public List<Etudiant> getStudents(Niveau niveau) {
+    public List<Etudiant> getStudents(Niveau niveau,int page) {
         return etudiantRepo.getStudents(niveau);
     }
 
     @Override
-    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant) {
-        return affectationRepo.findAll();
+    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant,int page) {
+    	Pageable p = PageRequest.of(page,10);
+        return affectationRepo.findAll(p).toList();
     }
+    
+    @Override
+	public List<EmplacementStage> getInternshipsLocations() {
+    	
+    	
+		return emplacementRepo.findAll();
+	}
 
     @Override
     public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
@@ -84,7 +103,7 @@ public class EncadrantServiceImpl implements EncadrantService {
     @Override
     public Boolean updateAssignment(AffectationEmplacementStage affectation) {
         AffectationEmplacementStage existentAffectation = affectationRepo.findById(affectation.getId()).get();
-
+        //TODO Check nulls
         existentAffectation.setEncadrant(affectation.getEncadrant());
         existentAffectation.setEtudiant(affectation.getEtudiant());
         existentAffectation.setStage(affectation.getStage());
@@ -101,5 +120,13 @@ public class EncadrantServiceImpl implements EncadrantService {
             return false;
         }
     }
+
+	@Override
+	public Encadrant findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return (Encadrant) userRepo.findByEmail(email);
+	}
+
+	
 
 }

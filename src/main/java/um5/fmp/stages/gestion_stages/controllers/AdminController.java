@@ -3,6 +3,9 @@ package um5.fmp.stages.gestion_stages.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +46,15 @@ public class AdminController {
 	NiveauRepository niveauRepo;
 	StageRepository stageRepo;
 	//afficher les entites:
+	
+	@GetMapping("/helloEncadrant")
+	@PreAuthorize("hasRole('ENCADRANT')")
+	public String helloEncadrant() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		
+		return "Hello encadrant: " +currentPrincipalName+ "";
+	}
 	
 	@GetMapping("/etudiants")
 	public List<Etudiant> listEtudiant() {

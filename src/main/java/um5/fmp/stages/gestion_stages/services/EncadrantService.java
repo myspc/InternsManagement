@@ -13,13 +13,17 @@ import um5.fmp.stages.gestion_stages.models.Stage;
 public interface EncadrantService {
 
     public Encadrant findById(Long id);
+    
+    public Encadrant findByEmail(String email);
 
     /**
      * Get students of same level as the mentor
      */
-    public List<Etudiant> getStudents(Niveau niveau);
+    public List<Etudiant> getStudents(Niveau niveau, int page);
 
-    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant);
+    public List<EmplacementStage> getInternshipsLocations();
+    
+    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant, int page);
 
     public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
             EmplacementStage location,

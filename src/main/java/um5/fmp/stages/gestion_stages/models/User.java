@@ -1,5 +1,8 @@
 package um5.fmp.stages.gestion_stages.models;
 
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
@@ -15,6 +18,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +32,9 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(value = "user")
-public class User {
+public class User implements UserDetails {
+	
+	private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +47,50 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @Override
+	@Transient
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+    	List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+
+		for(Role role: roles) {
+			list.add(new SimpleGrantedAuthority("ROLE_" + role.getNom()));
+		}
+
+        return list;
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
    
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
     
 }
