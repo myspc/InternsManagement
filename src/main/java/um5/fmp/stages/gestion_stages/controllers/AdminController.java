@@ -39,19 +39,9 @@ public class AdminController {
 	AdminService adminService;
 	//afficher les entites:
 	
-	@Autowired
-	EtudiantRepository etudiantRepo;
-
-
-<<<<<<< HEAD
 	
-=======
-	@GetMapping("/etudiants")
-	public List<Etudiant> listEtudiant() {
-		return etudiantRepo.findAll();
-	}
 
->>>>>>> 75d41c948e85cc696dcf26af5024085e6d636ee7
+
 	@GetMapping("/etudiants/{page}")
 	public List<Etudiant> listEtudiant(@PathVariable int page) {
 
