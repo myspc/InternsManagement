@@ -4,11 +4,13 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,9 @@ import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
+import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
+import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
 import um5.fmp.stages.gestion_stages.services.EncadrantServiceImpl;
 
 @RestController
@@ -32,22 +36,33 @@ public class EncadrantController {
 	@Autowired
 	EtudiantRepository etudiantRepo;
 	
+	@Autowired
+	NiveauRepository niveauRepo;
+	
 	
 	
 	@GetMapping("/students")
-	public List<Etudiant> getStudents(Principal principal,@RequestParam("page") int page){
-		Encadrant enc = encadrantService.findByEmail(principal.getName());
-		
-		return encadrantService.getStudents(enc.getNiveau(),page); 
+	public Page<Etudiant> getStudents(Principal principal,@RequestParam("page") int page){
+		Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
+		return encadrantService.getStudents(niveau,page); 
 	}
 	
 	@GetMapping("/assignments")
-	public List<AffectationEmplacementStage> getAssignments(@RequestParam("page") int page, Principal principal){
+	public Page<AffectationEmplacementStage> getAssignments(@RequestParam("page") int page, Principal principal){
 		Encadrant enc = encadrantService.findByEmail(principal.getName());
 		
 		//TODO check if page param not porvided
 		
 		return encadrantService.getAssignments(enc,page);
+	}
+	
+	@GetMapping("/me")
+	public Encadrant me(Principal principal){
+		Encadrant enc = encadrantService.findByEmail(principal.getName());
+		
+		//TODO check if page param not porvided
+		
+		return enc;
 	}
 	
 	@GetMapping("/internships/locations")
@@ -57,10 +72,10 @@ public class EncadrantController {
 	}
 	
 	@PostMapping("/internships/assign")
-	public Boolean assignInternship(Principal principal,AssignToInternshipDTO affectation) {
+	public Boolean assignInternship(Principal principal,@RequestBody AssignToInternshipDTO affectation) {
 		Encadrant encadrant = encadrantService.findByEmail(principal.getName());
-		Etudiant student  = etudiantRepo.findById(affectation.getStudentId()).get();
-		return encadrantService.assignStudentToLocation(encadrant,student,affectation.getStage(),affectation.getLocation(),affectation.getDate_debut(),affectation.getDate_fin());
+		
+		return encadrantService.assignStudentToLocation(encadrant,affectation.getStudent(),affectation.getStage(),affectation.getLocation(),affectation.getDate_debut(),affectation.getDate_fin());
 	}
 	
 	@PostMapping("/internships/assignment/update")

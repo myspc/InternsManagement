@@ -3,6 +3,8 @@ package um5.fmp.stages.gestion_stages.services;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
@@ -19,11 +21,11 @@ public interface EncadrantService {
     /**
      * Get students of same level as the mentor
      */
-    public List<Etudiant> getStudents(Niveau niveau, int page);
+    public Page<Etudiant> getStudents(Niveau niveau, int page);
 
     public List<EmplacementStage> getInternshipsLocations();
     
-    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant, int page);
+    public Page<AffectationEmplacementStage> getAssignments(Encadrant encadrant, int page);
 
     public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
             EmplacementStage location,

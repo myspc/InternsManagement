@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -60,14 +61,15 @@ public class EncadrantServiceImpl implements EncadrantService {
     }
 
     @Override
-    public List<Etudiant> getStudents(Niveau niveau,int page) {
-        return etudiantRepo.getStudents(niveau);
+    public Page<Etudiant> getStudents(Niveau niveau,int page) {
+    	Pageable p = PageRequest.of(page,10);
+    	return etudiantRepo.getStudents(niveau,p);
     }
 
     @Override
-    public List<AffectationEmplacementStage> getAssignments(Encadrant encadrant,int page) {
+    public Page<AffectationEmplacementStage> getAssignments(Encadrant encadrant,int page) {
     	Pageable p = PageRequest.of(page,10);
-        return affectationRepo.findAll(p).toList();
+        return affectationRepo.findAll(p);
     }
     
     @Override

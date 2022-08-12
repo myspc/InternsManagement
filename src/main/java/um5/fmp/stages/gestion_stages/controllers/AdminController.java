@@ -30,7 +30,7 @@ import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Stage;
-
+import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.services.AdminService;
 @RestController
 @RequestMapping("/admin")
@@ -38,9 +38,20 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	//afficher les entites:
-
-
 	
+	@Autowired
+	EtudiantRepository etudiantRepo;
+
+
+<<<<<<< HEAD
+	
+=======
+	@GetMapping("/etudiants")
+	public List<Etudiant> listEtudiant() {
+		return etudiantRepo.findAll();
+	}
+
+>>>>>>> 75d41c948e85cc696dcf26af5024085e6d636ee7
 	@GetMapping("/etudiants/{page}")
 	public List<Etudiant> listEtudiant(@PathVariable int page) {
 
