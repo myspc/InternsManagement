@@ -26,109 +26,117 @@ import um5.fmp.stages.gestion_stages.repository.UserRepository;
 @Service
 public class EncadrantServiceImpl implements EncadrantService {
 
-    @Autowired
-    EncadrantRepository encadrantRepo;
-    
-    @Autowired
-    UserRepository userRepo;
+	@Autowired
+	EncadrantRepository encadrantRepo;
 
-    @Autowired
-    EtudiantRepository etudiantRepo;
+	@Autowired
+	UserRepository userRepo;
 
-    @Autowired
-    AffectationRepository affectationRepo;
-    
-    @Autowired
-    EmplacementStageRepository emplacementRepo;
+	@Autowired
+	EtudiantRepository etudiantRepo;
 
-    public Boolean add(Encadrant encadrant) {
-        try {
-            encadrantRepo.save(encadrant);
-            return true;
+	@Autowired
+	AffectationRepository affectationRepo;
 
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Unable to save entity encadrant");
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+	@Autowired
+	EmplacementStageRepository emplacementRepo;
 
-    @Override
-    public Encadrant findById(Long id) {
-        Optional<Encadrant> encadrant = encadrantRepo.findById(id);
-        return encadrant.isPresent() ? encadrant.get() : null;
-    }
+	public Boolean add(Encadrant encadrant) {
+		try {
+			encadrantRepo.save(encadrant);
+			return true;
 
-    @Override
-    public Page<Etudiant> getStudents(Niveau niveau,int page) {
-    	Pageable p = PageRequest.of(page,10);
-    	return etudiantRepo.getStudents(niveau,p);
-    }
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Unable to save entity encadrant");
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
 
-    @Override
-    public Page<AffectationEmplacementStage> getAssignments(Encadrant encadrant,int page) {
-    	Pageable p = PageRequest.of(page,10);
-        return affectationRepo.findAll(p);
-    }
-    
-    @Override
+	@Override
+	public Encadrant findById(Long id) {
+		Optional<Encadrant> encadrant = encadrantRepo.findById(id);
+		return encadrant.isPresent() ? encadrant.get() : null;
+	}
+
+	@Override
+	public Page<Etudiant> getStudents(Niveau niveau, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return etudiantRepo.getStudents(niveau, p);
+	}
+
+	@Override
+	public Page<Etudiant> searchStudents(Niveau niveau, String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return etudiantRepo.searchStudents(niveau, search, p);
+	}
+
+	@Override
+	public Page<AffectationEmplacementStage> searchAssignments(Niveau niveau, String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return affectationRepo.searchAssignments(niveau, search, p);
+	}
+
+	@Override
+	public Page<AffectationEmplacementStage> getAssignments(Niveau niveau, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return affectationRepo.getAssignments(niveau,p);
+	}
+
+	@Override
 	public List<EmplacementStage> getInternshipsLocations() {
-    	
-    	
+
 		return emplacementRepo.findAll();
 	}
 
-    @Override
-    public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
-            EmplacementStage location,
-            Date date_debut, Date date_fin) {
-        AffectationEmplacementStage affectation = new AffectationEmplacementStage();
-        affectation.setEncadrant(encadrant);
-        affectation.setEtudiant(etudiant);
-        affectation.setStage(stage);
-        affectation.setEmplacementStage(location);
-        affectation.setDate_debut(date_debut);
-        affectation.setDate_fin(date_fin);
-        try {
-            affectationRepo.save(affectation);
-            return true;
+	@Override
+	public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
+			EmplacementStage location, Date date_debut, Date date_fin) {
+		AffectationEmplacementStage affectation = new AffectationEmplacementStage();
+		affectation.setEncadrant(encadrant);
+		affectation.setEtudiant(etudiant);
+		affectation.setStage(stage);
+		affectation.setEmplacementStage(location);
+		affectation.setDate_debut(date_debut);
+		affectation.setDate_fin(date_fin);
+		try {
+			affectationRepo.save(affectation);
+			return true;
 
-        } catch (Exception e) {
-            // TODO: Switch to slf4j for logging
-            System.out.println("Unable to save entity affectation");
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			// TODO: Switch to slf4j for logging
+			System.out.println("Unable to save entity affectation");
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
 
-    @Override
-    public Boolean updateAssignment(AffectationEmplacementStage affectation) {
-        AffectationEmplacementStage existentAffectation = affectationRepo.findById(affectation.getId()).get();
-        //TODO Check nulls
-        existentAffectation.setEncadrant(affectation.getEncadrant());
-        existentAffectation.setEtudiant(affectation.getEtudiant());
-        existentAffectation.setStage(affectation.getStage());
-        existentAffectation.setEmplacementStage(affectation.getEmplacementStage());
-        existentAffectation.setDate_debut(affectation.getDate_debut());
-        existentAffectation.setDate_fin(affectation.getDate_fin());
-        try {
-            affectationRepo.save(affectation);
-            return true;
+	@Override
+	public Boolean updateAssignment(AffectationEmplacementStage affectation) {
+		AffectationEmplacementStage existentAffectation = affectationRepo.findById(affectation.getId()).get();
+		// TODO Check nulls
+		existentAffectation.setEncadrant(affectation.getEncadrant());
+		existentAffectation.setEtudiant(affectation.getEtudiant());
+		existentAffectation.setStage(affectation.getStage());
+		existentAffectation.setEmplacementStage(affectation.getEmplacementStage());
+		existentAffectation.setDate_debut(affectation.getDate_debut());
+		existentAffectation.setDate_fin(affectation.getDate_fin());
+		try {
+			affectationRepo.save(affectation);
+			return true;
 
-        } catch (Exception e) {
-            // TODO: Switch to slf4j for logging
-            System.out.println("Unable to save entity affectation");
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			// TODO: Switch to slf4j for logging
+			System.out.println("Unable to save entity affectation");
+			return false;
+		}
+	}
 
 	@Override
 	public Encadrant findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return (Encadrant) userRepo.findByEmail(email);
 	}
-
-	
 
 }

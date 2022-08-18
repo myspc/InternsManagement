@@ -29,57 +29,75 @@ import um5.fmp.stages.gestion_stages.services.EncadrantServiceImpl;
 @RequestMapping("/encadrant")
 public class EncadrantController {
 
-	
 	@Autowired
 	EncadrantServiceImpl encadrantService;
-	
+
 	@Autowired
 	EtudiantRepository etudiantRepo;
-	
+
 	@Autowired
 	NiveauRepository niveauRepo;
-	
-	
-	
+
 	@GetMapping("/students")
-	public Page<Etudiant> getStudents(Principal principal,@RequestParam("page") int page){
-		Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
-		return encadrantService.getStudents(niveau,page); 
+	public Page<Etudiant> getStudents(Principal principal, @RequestParam("page") int page) {
+		Encadrant enc = encadrantService.findByEmail(principal.getName());
+		return encadrantService.getStudents(enc.getNiveau(), page);
 	}
-	
+
+	@GetMapping("/students/search")
+	public Page<Etudiant> findStudents(Principal principal, @RequestParam("search") String search,
+			@RequestParam("page") int page) {
+		Encadrant enc = encadrantService.findByEmail(principal.getName());
+
+		return encadrantService.searchStudents(enc.getNiveau(), search, page);
+	}
+
 	@GetMapping("/assignments")
-	public Page<AffectationEmplacementStage> getAssignments(@RequestParam("page") int page, Principal principal){
+	public Page<AffectationEmplacementStage> getAssignments(@RequestParam("page") int page, Principal principal) {
 		Encadrant enc = encadrantService.findByEmail(principal.getName());
-		
-		//TODO check if page param not porvided
-		
-		return encadrantService.getAssignments(enc,page);
+
+		// TODO check if page param not porvided
+
+		return encadrantService.getAssignments(enc.getNiveau(), page);
 	}
-	
-	@GetMapping("/me")
-	public Encadrant me(Principal principal){
+
+	@GetMapping("/assignments/search")
+	public Page<AffectationEmplacementStage> searchAssignments(Principal principal,
+			@RequestParam("search") String search, @RequestParam("page") int page) {
 		Encadrant enc = encadrantService.findByEmail(principal.getName());
-		
-		//TODO check if page param not porvided
-		
+
+		// TODO check if page param not porvided
+
+		return encadrantService.searchAssignments(enc.getNiveau(), search, page);
+	}
+
+	@GetMapping("/me")
+	public Encadrant me(Principal principal) {
+		Encadrant enc = encadrantService.findByEmail(principal.getName());
+
+		// TODO check if page param not porvided
+
 		return enc;
 	}
-	
+
 	@GetMapping("/internships/locations")
-	public List<EmplacementStage> getInternshipLocations(){
-		
+	public List<EmplacementStage> getInternshipLocations() {
+
 		return encadrantService.getInternshipsLocations();
 	}
-	
+
 	@PostMapping("/internships/assign")
-	public Boolean assignInternship(Principal principal,@RequestBody AssignToInternshipDTO affectation) {
+	public Boolean assignInternship(Principal principal, @RequestBody AssignToInternshipDTO affectation) {
 		Encadrant encadrant = encadrantService.findByEmail(principal.getName());
-		
-		return encadrantService.assignStudentToLocation(encadrant,affectation.getStudent(),affectation.getStage(),affectation.getLocation(),affectation.getDate_debut(),affectation.getDate_fin());
+
+		return encadrantService.assignStudentToLocation(encadrant, affectation.getStudent(), affectation.getStage(),
+				affectation.getLocation(), affectation.getDate_debut(), affectation.getDate_fin());
 	}
-	
+
 	@PostMapping("/internships/assignment/update")
-	public Boolean updateAssignment(AffectationEmplacementStage affectation) {
+	public Boolean updateAssignment(@RequestBody AffectationEmplacementStage affectation) {
+		System.out.println(affectation.getId());
+		System.out.println(affectation.getEtudiant().getNom());
 		return encadrantService.updateAssignment(affectation);
 	}
 }
