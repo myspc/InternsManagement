@@ -45,6 +45,9 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> /*exte
 
     @Query("Select e From Etudiant e Where e.niveau = :niveau")
     Page<Etudiant> getStudents(Niveau niveau,Pageable pageable);
+    
+    @Query("Select u From User u Where u.niveau = :niveau AND lower(u.nom) like lower(concat('%', :searchTerm, '%'))"+"or lower(u.prenom) like lower(concat('%', :searchTerm, '%'))"+"or lower(u.email) like lower(concat('%', :searchTerm, '%'))")
+    Page<Etudiant> searchStudents(Niveau niveau,String searchTerm,Pageable pageable);
 
 	
 
