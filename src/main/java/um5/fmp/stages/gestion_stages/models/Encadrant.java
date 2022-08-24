@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,10 +19,15 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue(value = "ENCADRANT")
 public class Encadrant extends User {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@ManyToOne
 	private Niveau niveau;
 
 	@OneToMany
-	@JsonIgnoreProperties("{proprietaire}")
+	@JsonIgnoreProperties("{encadrant,etudiant,documents}")
 	private List<AffectationEmplacementStage> affectationEmplacementStages;
 }

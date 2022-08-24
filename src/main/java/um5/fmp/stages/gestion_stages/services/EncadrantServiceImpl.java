@@ -92,7 +92,7 @@ public class EncadrantServiceImpl implements EncadrantService {
 
 	@Override
 	public Boolean assignStudentToLocation(Encadrant encadrant, Etudiant etudiant, Stage stage,
-			EmplacementStage location, Date date_debut, Date date_fin) {
+		EmplacementStage location, Date date_debut, Date date_fin) {
 		AffectationEmplacementStage affectation = new AffectationEmplacementStage();
 		affectation.setEncadrant(encadrant);
 		affectation.setEtudiant(etudiant);
@@ -101,13 +101,20 @@ public class EncadrantServiceImpl implements EncadrantService {
 		affectation.setDate_debut(date_debut);
 		affectation.setDate_fin(date_fin);
 		try {
-			affectationRepo.save(affectation);
+			List<AffectationEmplacementStage> affectationsEtudiant = etudiant.getAffectationEmplacementStages();
+
+			AffectationEmplacementStage savedAffevtation = affectationRepo.save(affectation);
+			affectationsEtudiant.add(savedAffevtation);
+			
+			etudiant.setAffectationEmplacementStages(affectationsEtudiant);
+			etudiantRepo.save(etudiant);
 			return true;
 
 		} catch (Exception e) {
 			// TODO: Switch to slf4j for logging
 			System.out.println("Unable to save entity affectation");
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -129,6 +136,18 @@ public class EncadrantServiceImpl implements EncadrantService {
 		} catch (Exception e) {
 			// TODO: Switch to slf4j for logging
 			System.out.println("Unable to save entity affectation");
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean deleteAssignment(Long id){
+		try{
+			affectationRepo.deleteById(id);
+			return true;
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,8 +91,8 @@ public class EncadrantController {
 	public Boolean assignInternship(Principal principal, @RequestBody AssignToInternshipDTO affectation) {
 		Encadrant encadrant = encadrantService.findByEmail(principal.getName());
 
-		return encadrantService.assignStudentToLocation(encadrant, affectation.getStudent(), affectation.getStage(),
-				affectation.getLocation(), affectation.getDate_debut(), affectation.getDate_fin());
+		return encadrantService.assignStudentToLocation(encadrant, affectation.getEtudiant(), affectation.getStage(),
+				affectation.getEmplacementStage(), affectation.getDate_debut(), affectation.getDate_fin());
 	}
 
 	@PostMapping("/internships/assignment/update")
@@ -99,5 +100,10 @@ public class EncadrantController {
 		System.out.println(affectation.getId());
 		System.out.println(affectation.getEtudiant().getNom());
 		return encadrantService.updateAssignment(affectation);
+	}
+	
+	@PostMapping("/internships/assignment/delete/{id}")
+	public Boolean updateAssignment(@PathVariable Long id) {
+		return encadrantService.deleteAssignment(id);
 	}
 }

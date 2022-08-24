@@ -1,5 +1,6 @@
 package um5.fmp.stages.gestion_stages;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,17 +10,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-import um5.fmp.stages.gestion_stages.models.EmplacementStage;
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
-import um5.fmp.stages.gestion_stages.models.Stage;
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
 import um5.fmp.stages.gestion_stages.repository.RoleRepository;
 import um5.fmp.stages.gestion_stages.repository.StageRepository;
+import um5.fmp.stages.gestion_stages.services.EmailServiceImpl;
 
 @SpringBootApplication
 public class GestionStagesApplication {
@@ -29,9 +29,22 @@ public class GestionStagesApplication {
 	}
 	
 	@Bean
-	  public ApplicationRunner dataLoader(
+	  public ApplicationRunner dataLoader(EmailServiceImpl es,
 			  EtudiantRepository etudiantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,NiveauRepository niveauRepo ,RoleRepository roleRepo,PasswordEncoder encoder) {
-		
+		/*Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
+		Role role = roleRepo.findById(Long.parseLong("4")).get();
+		Etudiant e2 = new Etudiant();
+		e2.setPrenom("Quedor");
+		e2.setNom("Sniper");
+		e2.setEmail("quedor@email.com");
+		e2.setPassword(encoder.encode("password"));
+		e2.setNiveau(niveau);
+		e2.setUsername("Quedor");
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(role);
+		e2.setRoles(roles);
+		etudiantRepo.save(e2);*/
+		//System.out.println(es.sendSimpleMail(new EmailDetails("zakaria2ettani@gmail.com", "test dev", "test fmp stage", null)));;
 		/*
 		EmplacementStage location = new EmplacementStage();
 		location.setNom("R&D Lab");
@@ -197,6 +210,7 @@ public class GestionStagesApplication {
 		etudiantRepo.save(e10);
 		etudiantRepo.save(e11);
 		*/
+		
 		return args -> {
 		      
 		    };
