@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name="Document")
 @Data
 @NoArgsConstructor
+@JsonSerialize
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

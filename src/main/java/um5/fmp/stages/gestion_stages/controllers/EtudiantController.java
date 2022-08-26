@@ -1,5 +1,6 @@
 package um5.fmp.stages.gestion_stages.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Document;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
+import um5.fmp.stages.gestion_stages.repository.UserRepository;
 import um5.fmp.stages.gestion_stages.services.EtudiantService;
 
 @RestController
@@ -23,6 +25,14 @@ public class EtudiantController {
 	
 	@Autowired
 	private EtudiantService etudiantService;
+	
+	
+	
+	
+	@GetMapping("/me")
+	public Etudiant me(Principal principal) {
+		return etudiantService.me(principal.getName());
+	}
 	
 	@PutMapping("/etudiant")
 	public void modifierPassword(@RequestBody Etudiant e) {

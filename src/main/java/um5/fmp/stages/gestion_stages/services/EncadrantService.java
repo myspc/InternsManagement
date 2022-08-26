@@ -37,4 +37,5 @@ public interface EncadrantService {
 
     public Boolean updateAssignment(AffectationEmplacementStage affectation);
 
+    public Boolean deleteAssignment(Long id);
 }
