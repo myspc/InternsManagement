@@ -18,15 +18,19 @@ import um5.fmp.stages.gestion_stages.models.Stage;
 public interface AdminService {
 	//afficher les entites:
 	
-	public List<Etudiant> listEtudiant(int page);
-	public List<Encadrant> listEncadrant(int page);
-	public List<Admin> listAdmin(int page);
-	public List<Stage> listStage(int page);
-	public List<Annonce> listAnnonce(int page);
-	public List<Document> listDocuments(int page);
-	public List<EmplacementStage> listEmplacement(int page);
-	public List<Niveau> listNiveau(int page);
-	
+	public Page<Etudiant> listEtudiant(int page);
+	public Page<Encadrant> listEncadrant(int page);
+	public Page<Admin> listAdmin(int page);
+	public Page<Stage> listStage(int page);
+	public Page<Annonce> listAnnonce(int page);
+	public Page<Document> listDocuments(int page);
+	public Page<EmplacementStage> listEmplacement(int page);
+	public Page<Niveau> listNiveau(int page);
+	public Page<Etudiant> searchStudents(String search, int page);
+	public Page<Encadrant> searchEncadrants(String search, int page);
+	public Page<Admin> searchAdmins(String search, int page);
+	public Page<Annonce> searchAnnonce(String search, int page);
+	public Page<Stage> searchStage(String search, int page);
 /*--------------------------------------------------------------------------------
 	findbyID*/
 	
@@ -48,6 +52,8 @@ public interface AdminService {
 	public Boolean ajouterAnnonce(Annonce a);
 	public Boolean ajouterEmplacement(EmplacementStage e);
 	 public Boolean ajouterNiveau(Niveau s);
+	 public Boolean ajouterEtudiants(List <Etudiant> e);
+	 
 	
 
 /*---------------------------------------------------------------------------------

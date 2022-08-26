@@ -3,19 +3,23 @@ package um5.fmp.stages.gestion_stages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
+import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
+import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
 import um5.fmp.stages.gestion_stages.models.Stage;
+import um5.fmp.stages.gestion_stages.repository.AdminRepository;
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
+import um5.fmp.stages.gestion_stages.repository.EncadrantRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
 import um5.fmp.stages.gestion_stages.repository.RoleRepository;
@@ -30,7 +34,32 @@ public class GestionStagesApplication {
 	
 	@Bean
 	  public ApplicationRunner dataLoader(
-			  EtudiantRepository etudiantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,NiveauRepository niveauRepo ,RoleRepository roleRepo,PasswordEncoder encoder) {
+			  EtudiantRepository etudiantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,PasswordEncoder encoder, NiveauRepository niveauRepo ,AdminRepository er , RoleRepository roleRepo) {
+		
+		
+	  	
+	/*
+		Niveau n = new Niveau();
+		n.setLibelle("2");
+		niveauRepo.save(n);
+	
+		
+		Role r = new Role();
+		r.setNom("ETUDIANT");
+		roleRepo.save(r);
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(r);
+		Etudiant e1 =new Etudiant();
+		e1.setEmail("baba@gmail.com");
+		
+		e1.setNom("MONIM");
+		e1.setPassword(encoder.encode("azerty"));
+		e1.setPrenom("habab");
+		e1.setRoles(roles);
+		etudiantRepo.save(e1);
+		
+		
+		
 		
 		/*
 		EmplacementStage location = new EmplacementStage();
@@ -55,13 +84,7 @@ public class GestionStagesApplication {
 		Role role = roleRepo.findById(Long.parseLong("4")).get();
 		Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
 		
-		Niveau n1 = new Niveau();
-		n1.setLibelle("1");
-		List<Stage> stages = new ArrayList<Stage>();
-		stages.add(stage);
-		n1.setStages(stages);
-
-		niveauRepo.save(n1);
+		
 		*/
 		/*
 		Etudiant e1 = new Etudiant();
