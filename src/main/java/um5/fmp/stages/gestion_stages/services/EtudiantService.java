@@ -30,4 +30,6 @@ public interface EtudiantService {
 	//Retourner un etudiant
 	public Etudiant avoirEtudiant(Long id);
 	
+	public Etudiant me(String email);
+	
 }

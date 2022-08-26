@@ -12,6 +12,7 @@ import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.repository.DocumentRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
+import um5.fmp.stages.gestion_stages.repository.UserRepository;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
@@ -19,6 +20,9 @@ public class EtudiantServiceImpl implements EtudiantService {
 	@Autowired
 	private EtudiantRepository etudiantRepository;
 	private DocumentRepository documentRepository;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	
 	@Override
@@ -65,6 +69,12 @@ public class EtudiantServiceImpl implements EtudiantService {
 	public Etudiant avoirEtudiant(Long id) {
 		Optional<Etudiant> etudiant=etudiantRepository.findById(id);
 		return etudiant.isPresent() ? etudiant.get() : null;
+	}
+
+	@Override
+	public Etudiant me(String email) {
+		// TODO Auto-generated method stub
+		return (Etudiant)userRepo.findByEmail(email);
 	}
 	
 }

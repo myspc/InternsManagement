@@ -11,10 +11,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.Data;
 
 @Entity
 @Table(name="AffectationEmplacementStage")
+@JsonSerialize
 @Data
 public class AffectationEmplacementStage {
 
@@ -28,12 +33,15 @@ public class AffectationEmplacementStage {
     private Stage stage;
 
     @ManyToOne
+    @JsonIgnoreProperties("affectationEmplacementStages")
     private Etudiant etudiant;
 
     @ManyToOne
+    @JsonIgnoreProperties("affectationEmplacementStages")
     private Encadrant encadrant;
 
     @OneToMany
+    @JsonIgnoreProperties("{proprietaire}")
     private List<Document> documents;
     
     @ManyToOne

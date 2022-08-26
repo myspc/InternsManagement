@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
-import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 
 public interface AffectationRepository extends JpaRepository<AffectationEmplacementStage, Long> {
