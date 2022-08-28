@@ -2,6 +2,7 @@ package um5.fmp.stages.gestion_stages.controllers;
 
 import java.awt.print.Pageable;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
+import um5.fmp.stages.gestion_stages.dto.EtudiantDTO;
+import um5.fmp.stages.gestion_stages.dto.StageDTO;
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
 import um5.fmp.stages.gestion_stages.models.Document;
@@ -32,13 +33,17 @@ import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Stage;
+import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
+import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
 import um5.fmp.stages.gestion_stages.services.AdminService;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
 	AdminService adminService;
+	@Autowired
+	NiveauRepository nr;
 	//afficher les entites:
 	
 	
@@ -149,11 +154,36 @@ public class AdminController {
 
 		return adminService.searchAnnonce(search, page);
 	}
+	@GetMapping("/emplacement/search")
+	public Page<EmplacementStage> findEmpl( @RequestParam("search") String search,
+			@RequestParam("page") int page) {
+		
+
+		return adminService.searchEmpl(search, page);
+	}
+	@GetMapping("/niveau/search")
+	public Page<Niveau> findNiveau( @RequestParam("search") String search,
+			@RequestParam("page") int page) {
+		
+
+		return adminService.searchNiveau(search, page);
+	}
+	@PostMapping("/getNiveau")
+	public Niveau getNiveauStage(@RequestBody Stage s) {
+		return adminService.getNiveauFromStage(s);
+	}
 	//ajoute les entites:
 	
 	@PostMapping("/etudiant")
-	public void ajouterEtudiant(@RequestBody Etudiant e) {
-		adminService.ajouterEtudiant(e);
+	public void ajouterEtudiant(@RequestBody EtudiantDTO e) {
+		Niveau n=nr.findById(e.getNiveau()).get();
+		Etudiant et= new Etudiant();
+		et.setEmail(e.getEmail());
+		et.setNom(e.getNom());
+		et.setPrenom(e.getPrenom());
+		et.setPassword(e.getPassword());
+		et.setNiveau(n);
+		adminService.ajouterEtudiant(et);
 	}
 
 	@PostMapping("/encadrant")
@@ -165,8 +195,17 @@ public class AdminController {
 		adminService.ajouterAdmin(a);
 	}
 	@PostMapping("/stage")
-	public void ajouterStage(@RequestBody Stage s) {
-		adminService.ajouterStage(s);
+	public void ajouterStage(@RequestBody StageDTO s) {
+		Stage st=new Stage();
+		st.setDuree(s.getDuree());
+		st.setNom(s.getNom());
+		st.setSujet(s.getSujet());
+		adminService.ajouterStage(st);
+		Niveau n=nr.findById(s.getNiveau()).get();
+		List<Stage>stages=n.getStages();
+		stages.add(st);
+		n.setStages(stages);
+		nr.save(n);
 	}
 	@PostMapping("/annonce")
 	public void ajouterAnnoce(@RequestBody Annonce a) {
@@ -200,12 +239,17 @@ public class AdminController {
 		adminService.modifierAdmin(a);
 	}
 	@PutMapping("/stage")
-	public void modifierStage(@RequestBody Stage s) {
+	public void modifierStage(@RequestBody StageDTO s) {
+		
 		adminService.modifierStage(s);
 	}
 	@PutMapping("/annonce")
 	public void modifierAnnonce(@RequestBody Annonce a) {
 		adminService.modifierAnnonce(a);
+	}
+	@PutMapping("/niveau")
+	public void modifierNiveau(@RequestBody Niveau n) {
+		adminService.modifierNiveau(n);
 	}
 	@PutMapping("/emplacement")
 	public void modifierEmplacement(@RequestBody EmplacementStage e) {
@@ -233,6 +277,10 @@ public class AdminController {
 	@DeleteMapping("/annonce/{id}")
 	public void supprimerAnnonce(@PathVariable long id) {
 		adminService.deleteAnnonce(id);
+	}
+	@DeleteMapping("/niveau/{id}")
+	public void supprimerNiveau(@PathVariable long id) {
+		adminService.deleteNiveau(id);
 	}
 	@DeleteMapping("/emplacement/{id}")
 	public void supprimerEmpacement(@PathVariable long id) {

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import um5.fmp.stages.gestion_stages.dto.StageDTO;
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
 import um5.fmp.stages.gestion_stages.models.Document;
@@ -31,6 +32,8 @@ public interface AdminService {
 	public Page<Admin> searchAdmins(String search, int page);
 	public Page<Annonce> searchAnnonce(String search, int page);
 	public Page<Stage> searchStage(String search, int page);
+	public Page<Niveau> searchNiveau(String search, int page);
+	public Page<EmplacementStage> searchEmpl(String search, int page);
 /*--------------------------------------------------------------------------------
 	findbyID*/
 	
@@ -42,6 +45,7 @@ public interface AdminService {
 	public Document getDocument(long id);
 	public EmplacementStage getEmplacement(long id);
 	public Niveau getNiveau(long id);
+	public Niveau getNiveauFromStage(Stage s);
 	
 /*---------------------------------------------------------------------------------
 	ajout*/
@@ -61,9 +65,10 @@ public interface AdminService {
 	public Boolean modifierEtudiant(Etudiant e);
 	public Boolean modifierEncadrant(Encadrant e);
 	public Boolean modifierAdmin(Admin a);
-	public Boolean modifierStage(Stage s);
+	public Boolean modifierStage(StageDTO s);
 	public Boolean modifierAnnonce(Annonce a);
 	public Boolean modifierEmplacement(EmplacementStage e);
+	public Boolean modifierNiveau(Niveau n);
 	
 	
 /*----------------------------------------------------------------------------------	
@@ -74,6 +79,7 @@ public interface AdminService {
 	public Boolean deleteStage(long id);
 	public Boolean deleteAnnonce(long id);
 	public Boolean deleteEmplacement(long id);
+	public Boolean deleteNiveau(long id);
 	
 /*-----------------------------------------------------------------------------------	
     affectation */

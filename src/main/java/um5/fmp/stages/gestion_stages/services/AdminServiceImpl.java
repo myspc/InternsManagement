@@ -14,9 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ch.qos.logback.core.encoder.Encoder;
+import um5.fmp.stages.gestion_stages.dto.StageDTO;
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
 import um5.fmp.stages.gestion_stages.models.Document;
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
@@ -57,6 +59,8 @@ public class AdminServiceImpl implements AdminService {
 	RoleRepository roleRepo;
 	@Autowired
 	PasswordEncoder encoder;
+	@Autowired 
+	private EmailService es;
     
 	@Override
 	public Page<Etudiant> listEtudiant(int  page) {
@@ -162,6 +166,7 @@ public class AdminServiceImpl implements AdminService {
 			roles.add(roleRepo.findByNom("ETUDIANT"));
 			e.setRoles(roles);
 			e.setPassword(encoder.encode(e.getPassword()));
+			 
             etudiantRepo.save(e);
             return true;
 
@@ -274,7 +279,7 @@ public class AdminServiceImpl implements AdminService {
 		existantEtudiant.setNom(e.getNom());
 		existantEtudiant.setPrenom(e.getPrenom());
 		existantEtudiant.setUsername(e.getUsername());
-		existantEtudiant.setPassword(e.getPassword());
+		
 		existantEtudiant.setNiveau(e.getNiveau());
 		try {
 			etudiantRepo.save(existantEtudiant);
@@ -293,7 +298,7 @@ public class AdminServiceImpl implements AdminService {
 		existantEncadrant.setNom(e.getNom());
 		existantEncadrant.setPrenom(e.getPrenom());
 		existantEncadrant.setUsername(e.getUsername());
-		existantEncadrant.setPassword(e.getPassword());
+		
 		existantEncadrant.setNiveau(e.getNiveau());
 		try {
 			encadrantRepo.save(existantEncadrant);
@@ -312,7 +317,7 @@ public class AdminServiceImpl implements AdminService {
 		existantAdmin.setNom(a.getNom());
 		existantAdmin.setPrenom(a.getPrenom());
 		existantAdmin.setUsername(a.getUsername());
-		existantAdmin.setPassword(a.getPassword());
+		
 		try {
 			adminRepo.save(existantAdmin);
 			return true;
@@ -324,19 +329,42 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Boolean modifierStage(Stage s) {
+	public Boolean modifierStage(StageDTO s) {
+		Niveau newNiv=niveauRepo.findById(s.getNiveau()).get();
+		List<Stage>stages=newNiv.getStages();
 		Stage existantStage  = stageRepo.findById(s.getId()).get();
+		Niveau oldNiv=getNiveauFromStage(existantStage);
+		
+		oldNiv.getStages().remove(existantStage);
+		niveauRepo.save(oldNiv);
+		newNiv.getStages().remove(existantStage);
+		niveauRepo.save(newNiv);
 		existantStage.setDuree(s.getDuree());
 		existantStage.setNom(s.getNom());
 		existantStage.setSujet(s.getSujet());
+		stages.add(existantStage);
+		newNiv.setStages(stages);
+		
+		
+		
+		
 		try {
-			stageRepo.save(existantStage);
-			return true;
-		}catch (Exception ex) {
-            // TODO: Switch to slf4j for logging
-            System.out.println("Unable to modify stage");
-            return false;
-        }
+			
+			    
+			    stageRepo.save(existantStage);
+			    niveauRepo.save(newNiv);
+				
+				return true;
+			}catch (Exception ex) {
+			    // TODO: Switch to slf4j for logging
+				
+			    System.out.println("Unable to modify stage");
+			    return false;
+			}
+		
+		
+		
+		
 	}
 
 	@Override
@@ -423,7 +451,11 @@ try {
 	public Boolean deleteStage(long id) {
 try {
 			
-            stageRepo.delete(stageRepo.findById(id).get());
+	Stage existantStage  = stageRepo.findById(id).get();
+	Niveau oldNiv=getNiveauFromStage(existantStage);
+	oldNiv.getStages().remove(existantStage);
+	niveauRepo.save(oldNiv);
+	stageRepo.delete(existantStage);
             return true;
 
         } catch (Exception ex) {
@@ -597,8 +629,62 @@ try {
 
 	@Override
 	public Boolean ajouterEtudiants(List<Etudiant> e) {
-		etudiantRepo.saveAll(e);
+		String pass;
+		for(Etudiant etudiant : e) {
+			pass=Passgen.genPassword();
+			etudiant.setPassword(encoder.encode(pass));
+			etudiantRepo.save(etudiant);
+			es.sendSimpleMail(new EmailDetails(etudiant.getEmail(),"votre mot de pass est: "+pass," compte creer ",null));
+			
+		}
+		
 		return true;
+	}
+
+	@Override
+	public Boolean modifierNiveau(Niveau n) {
+		Niveau exNiveau=niveauRepo.findById(n.getId()).get();
+		exNiveau.setLibelle(n.getLibelle());
+		try {
+			niveauRepo.save(exNiveau);
+			return true;
+		}catch (Exception ex) {
+            // TODO: Switch to slf4j for logging
+            System.out.println("Unable to modify niveau");
+            return false;
+        }
+	}
+
+	@Override
+	public Boolean deleteNiveau(long id) {
+		niveauRepo.delete(niveauRepo.findById(id).get());
+		return null;
+	}
+
+	@Override
+	public Page<Niveau> searchNiveau(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return niveauRepo.searchNiveau(search, p);
+	}
+
+	@Override
+	public Niveau getNiveauFromStage(Stage s) {
+		List<Niveau>ns=new ArrayList<Niveau>();
+		ns=niveauRepo.findAll();
+		for(Niveau n: ns) {
+			for(Stage ss: n.getStages()) {
+				if(ss.eq(s))
+					return n;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Page<EmplacementStage> searchEmpl(String search, int page) {
+	    
+		Pageable p = PageRequest.of(page, 10);
+		return emplacementStageRepo.searchEmpl(search, p);
 	}
 
 	
