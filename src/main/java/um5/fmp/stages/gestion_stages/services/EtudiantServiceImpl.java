@@ -45,13 +45,19 @@ public class EtudiantServiceImpl implements EtudiantService {
 	}
 
 	@Override
-	public void deposerDocument(Etudiant etudiant, Document document) {
+	public boolean deposerDocument(Etudiant etudiant, Document document) {
 		Etudiant e=etudiantRepository.findById(etudiant.getId()).get();
 		
 		if (e!=null) {
 			document.setProprietaire(e);
-			documentRepository.save(document);
+			try {
+				documentRepository.save(document);
+				return true;
+			} catch (Exception e2) {
+				return false;
+			}
 		}
+		return false;
 	}
 
 	@Override

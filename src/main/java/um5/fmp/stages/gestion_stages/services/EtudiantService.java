@@ -22,7 +22,7 @@ public interface EtudiantService {
 	public List<Document> getDocumentsEtd(Long id);
 	
 	//Ajouter/dépôser des documents
-	public void deposerDocument(Etudiant etudiant,Document document);
+	public boolean deposerDocument(Etudiant etudiant,Document document);
 	
 	//Detail des affectations stages
 	public List<AffectationEmplacementStage> getAffectations(Long id);
