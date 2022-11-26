@@ -27,7 +27,7 @@ public class Etudiant extends User {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	
+
     private Niveau niveau;
 
     @OneToMany

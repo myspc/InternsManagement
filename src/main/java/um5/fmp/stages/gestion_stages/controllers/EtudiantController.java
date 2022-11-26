@@ -55,8 +55,9 @@ public class EtudiantController {
 	}
 	
 	@PostMapping("/importDocument")
-	public void importDocument(@RequestBody Etudiant e,Document document) {
-		etudiantService.deposerDocument(e, document);
+	public boolean importDocument(Principal principal,@RequestBody Document document) {
+		Etudiant e = etudiantService.me(principal.getName());
+		return etudiantService.deposerDocument(e, document);
 	}
 	
 	@GetMapping("/affectations")
