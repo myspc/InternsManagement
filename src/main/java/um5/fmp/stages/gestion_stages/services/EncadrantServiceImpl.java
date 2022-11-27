@@ -100,6 +100,7 @@ public class EncadrantServiceImpl implements EncadrantService {
 		affectation.setEmplacementStage(location);
 		affectation.setDate_debut(date_debut);
 		affectation.setDate_fin(date_fin);
+		System.out.println(encadrant.getEmail());
 		try {
 			List<AffectationEmplacementStage> affectationsEtudiant = etudiant.getAffectationEmplacementStages();
 

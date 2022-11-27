@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -28,6 +30,7 @@ public class Encadrant extends User {
 	private Niveau niveau;
 
 	@OneToMany
+	@Nullable
 	@JsonIgnoreProperties("{encadrant,etudiant,documents}")
 	private List<AffectationEmplacementStage> affectationEmplacementStages;
 }

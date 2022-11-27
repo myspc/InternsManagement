@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import um5.fmp.stages.gestion_stages.dto.DocumentDTO;
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Document;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
@@ -55,7 +56,7 @@ public class EtudiantController {
 	}
 	
 	@PostMapping("/importDocument")
-	public boolean importDocument(Principal principal,@RequestBody Document document) {
+	public boolean importDocument(Principal principal,@RequestBody DocumentDTO document) {
 		Etudiant e = etudiantService.me(principal.getName());
 		return etudiantService.deposerDocument(e, document);
 	}

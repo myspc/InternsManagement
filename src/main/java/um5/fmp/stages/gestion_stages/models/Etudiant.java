@@ -30,7 +30,7 @@ public class Etudiant extends User {
     private Niveau niveau;
 
     @OneToMany
-    @JsonIgnoreProperties("{proprietaire}")
+    @JsonIgnoreProperties("proprietaire")
     private List<Document> documents;
 
     @OneToMany

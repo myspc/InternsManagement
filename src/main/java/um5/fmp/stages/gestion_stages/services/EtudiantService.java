@@ -2,6 +2,7 @@ package um5.fmp.stages.gestion_stages.services;
 
 import java.util.List;
 
+import um5.fmp.stages.gestion_stages.dto.DocumentDTO;
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Document;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
@@ -22,7 +23,7 @@ public interface EtudiantService {
 	public List<Document> getDocumentsEtd(Long id);
 	
 	//Ajouter/dépôser des documents
-	public boolean deposerDocument(Etudiant etudiant,Document document);
+	public boolean deposerDocument(Etudiant etudiant,DocumentDTO document);
 	
 	//Detail des affectations stages
 	public List<AffectationEmplacementStage> getAffectations(Long id);

@@ -1,16 +1,20 @@
 package um5.fmp.stages.gestion_stages.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import um5.fmp.stages.gestion_stages.dto.DocumentDTO;
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Document;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
+import um5.fmp.stages.gestion_stages.repository.AffectationRepository;
 import um5.fmp.stages.gestion_stages.repository.DocumentRepository;
+import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.UserRepository;
 
@@ -19,7 +23,12 @@ public class EtudiantServiceImpl implements EtudiantService {
 
 	@Autowired
 	private EtudiantRepository etudiantRepository;
+	
+	@Autowired
 	private DocumentRepository documentRepository;
+	
+	@Autowired
+	private AffectationRepository affectationRepository;
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -45,15 +54,33 @@ public class EtudiantServiceImpl implements EtudiantService {
 	}
 
 	@Override
-	public boolean deposerDocument(Etudiant etudiant, Document document) {
+	public boolean deposerDocument(Etudiant etudiant, DocumentDTO document) {
 		Etudiant e=etudiantRepository.findById(etudiant.getId()).get();
-		
+		AffectationEmplacementStage aes = affectationRepository.findById(document.getAffectationId()).get();
+		Document d = new Document();
 		if (e!=null) {
-			document.setProprietaire(e);
+			d.setLien(document.getLien());
+			d.setType(document.getType());
+			d.setDescription(document.getDescription());
+			d.setProprietaire(e);
 			try {
-				documentRepository.save(document);
+				documentRepository.save(d);
+				List<Document> documentsAES = aes.getDocuments();
+				List<Document> documentsE = e.getDocuments();
+				
+				
+				documentsAES.add(d);
+				documentsE.add(d);
+
+
+				aes.setDocuments(documentsAES);
+				e.setDocuments(documentsE);
+				affectationRepository.save(aes);
+				etudiantRepository.save(e);
 				return true;
 			} catch (Exception e2) {
+				System.out.println(e2.getMessage()); 
+				e2.printStackTrace();
 				return false;
 			}
 		}
