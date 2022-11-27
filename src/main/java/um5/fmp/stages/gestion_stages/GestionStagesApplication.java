@@ -4,20 +4,37 @@ package um5.fmp.stages.gestion_stages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+<<<<<<< HEAD
 import um5.fmp.stages.gestion_stages.models.EmailDetails;
+=======
+
+
+>>>>>>> 278dbe82a52ea9bac8abc91d5c4c1da3d10622b9
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
 import um5.fmp.stages.gestion_stages.models.Stage;
+<<<<<<< HEAD
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
+=======
+import um5.fmp.stages.gestion_stages.repository.AdminRepository;
+import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
+import um5.fmp.stages.gestion_stages.models.Etudiant;
+import um5.fmp.stages.gestion_stages.models.Niveau;
+import um5.fmp.stages.gestion_stages.models.Role;
+
+
+>>>>>>> 278dbe82a52ea9bac8abc91d5c4c1da3d10622b9
 import um5.fmp.stages.gestion_stages.repository.EncadrantRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
@@ -33,6 +50,45 @@ public class GestionStagesApplication {
 	}
 	
 	@Bean
+
+	  public ApplicationRunner dataLoader(NiveauRepository nr, StageRepository sr,EmplacementStageRepository locationRepo
+			) {
+		/*
+		List<Niveau> ns = new ArrayList<Niveau>();
+		List<Stage> ss = new ArrayList<Stage>();
+	    ss=sr.findAll();
+	    ns=nr.findAll();
+	    ns.get(0).setStages(ss);
+	    nr.saveAll(ns);
+	    EmplacementStage location = new EmplacementStage();
+		location.setNom("R&D Lab");
+		location.setAdresse("6th avenu");
+		location.setVille("Marrakech");
+		locationRepo.save(location);
+	
+		Niveau n = new Niveau();
+		n.setLibelle("2");
+		niveauRepo.save(n);
+	
+		
+		Role r = new Role();
+		r.setNom("ETUDIANT");
+		roleRepo.save(r);
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(r);
+		Etudiant e1 =new Etudiant();
+		e1.setEmail("baba@gmail.com");
+		
+		e1.setNom("MONIM");
+		e1.setPassword(encoder.encode("azerty"));
+		e1.setPrenom("habab");
+		e1.setRoles(roles);
+		etudiantRepo.save(e1);
+		
+		
+		
+		
+=======
 	  public ApplicationRunner dataLoader(EmailServiceImpl es,
 			  EtudiantRepository etudiantRepo,EncadrantRepository encadrantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,NiveauRepository niveauRepo ,RoleRepository roleRepo,PasswordEncoder encoder) {
 
@@ -77,6 +133,7 @@ public class GestionStagesApplication {
 		e2.setRoles(roles);
 		etudiantRepo.save(e2);*/
 		//System.out.println(es.sendSimpleMail(new EmailDetails("zakaria2ettani@gmail.com", "test dev", "test fmp stage", null)));;
+
 		/*
 		EmplacementStage location = new EmplacementStage();
 		location.setNom("R&D Lab");
@@ -100,13 +157,7 @@ public class GestionStagesApplication {
 		Role role = roleRepo.findById(Long.parseLong("4")).get();
 		Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
 		
-		Niveau n1 = new Niveau();
-		n1.setLibelle("1");
-		List<Stage> stages = new ArrayList<Stage>();
-		stages.add(stage);
-		n1.setStages(stages);
-
-		niveauRepo.save(n1);
+		
 		*/
 		/*
 		Etudiant e1 = new Etudiant();

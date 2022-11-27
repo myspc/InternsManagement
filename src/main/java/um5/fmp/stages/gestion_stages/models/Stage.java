@@ -1,5 +1,7 @@
 package um5.fmp.stages.gestion_stages.models;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,16 @@ public class Stage {
     private String nom;
     private String sujet;
     private int duree;
+	
+	public boolean eq(Stage obj) {
+		if(this.id==obj.id)
+			return true;
+		return false;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
     
     
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import um5.fmp.stages.gestion_stages.dto.StageDTO;
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
 import um5.fmp.stages.gestion_stages.models.Document;
@@ -18,15 +19,21 @@ import um5.fmp.stages.gestion_stages.models.Stage;
 public interface AdminService {
 	//afficher les entites:
 	
-	public List<Etudiant> listEtudiant(int page);
-	public List<Encadrant> listEncadrant(int page);
-	public List<Admin> listAdmin(int page);
-	public List<Stage> listStage(int page);
-	public List<Annonce> listAnnonce(int page);
-	public List<Document> listDocuments(int page);
-	public List<EmplacementStage> listEmplacement(int page);
-	public List<Niveau> listNiveau(int page);
-	
+	public Page<Etudiant> listEtudiant(int page);
+	public Page<Encadrant> listEncadrant(int page);
+	public Page<Admin> listAdmin(int page);
+	public Page<Stage> listStage(int page);
+	public Page<Annonce> listAnnonce(int page);
+	public Page<Document> listDocuments(int page);
+	public Page<EmplacementStage> listEmplacement(int page);
+	public Page<Niveau> listNiveau(int page);
+	public Page<Etudiant> searchStudents(String search, int page);
+	public Page<Encadrant> searchEncadrants(String search, int page);
+	public Page<Admin> searchAdmins(String search, int page);
+	public Page<Annonce> searchAnnonce(String search, int page);
+	public Page<Stage> searchStage(String search, int page);
+	public Page<Niveau> searchNiveau(String search, int page);
+	public Page<EmplacementStage> searchEmpl(String search, int page);
 /*--------------------------------------------------------------------------------
 	findbyID*/
 	
@@ -38,6 +45,7 @@ public interface AdminService {
 	public Document getDocument(long id);
 	public EmplacementStage getEmplacement(long id);
 	public Niveau getNiveau(long id);
+	public Niveau getNiveauFromStage(Stage s);
 	
 /*---------------------------------------------------------------------------------
 	ajout*/
@@ -48,6 +56,8 @@ public interface AdminService {
 	public Boolean ajouterAnnonce(Annonce a);
 	public Boolean ajouterEmplacement(EmplacementStage e);
 	 public Boolean ajouterNiveau(Niveau s);
+	 public Boolean ajouterEtudiants(List <Etudiant> e);
+	 
 	
 
 /*---------------------------------------------------------------------------------
@@ -55,9 +65,10 @@ public interface AdminService {
 	public Boolean modifierEtudiant(Etudiant e);
 	public Boolean modifierEncadrant(Encadrant e);
 	public Boolean modifierAdmin(Admin a);
-	public Boolean modifierStage(Stage s);
+	public Boolean modifierStage(StageDTO s);
 	public Boolean modifierAnnonce(Annonce a);
 	public Boolean modifierEmplacement(EmplacementStage e);
+	public Boolean modifierNiveau(Niveau n);
 	
 	
 /*----------------------------------------------------------------------------------	
@@ -68,6 +79,7 @@ public interface AdminService {
 	public Boolean deleteStage(long id);
 	public Boolean deleteAnnonce(long id);
 	public Boolean deleteEmplacement(long id);
+	public Boolean deleteNiveau(long id);
 	
 /*-----------------------------------------------------------------------------------	
     affectation */

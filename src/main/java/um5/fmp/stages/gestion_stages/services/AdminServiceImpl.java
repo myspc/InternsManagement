@@ -1,6 +1,7 @@
 package um5.fmp.stages.gestion_stages.services;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,15 +10,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.core.encoder.Encoder;
+import um5.fmp.stages.gestion_stages.dto.StageDTO;
 import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.Annonce;
 import um5.fmp.stages.gestion_stages.models.Document;
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
+import um5.fmp.stages.gestion_stages.models.Role;
 import um5.fmp.stages.gestion_stages.models.Stage;
 import um5.fmp.stages.gestion_stages.repository.AdminRepository;
 import um5.fmp.stages.gestion_stages.repository.AffectationRepository;
@@ -27,6 +33,7 @@ import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.repository.EncadrantRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
+import um5.fmp.stages.gestion_stages.repository.RoleRepository;
 import um5.fmp.stages.gestion_stages.repository.StageRepository;
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -48,53 +55,59 @@ public class AdminServiceImpl implements AdminService {
 	NiveauRepository niveauRepo;
 	@Autowired
 	StageRepository stageRepo;
-
+	@Autowired
+	RoleRepository roleRepo;
+	@Autowired
+	PasswordEncoder encoder;
+	@Autowired 
+	private EmailService es;
+    
 	@Override
-	public List<Etudiant> listEtudiant(int  page) {
+	public Page<Etudiant> listEtudiant(int  page) {
 		Pageable p = PageRequest.of(page,10);
-		return etudiantRepo.findAll(p).toList();
+		return etudiantRepo.findAll(p);
 	}
 
 	@Override
-	public List<Encadrant> listEncadrant(int page) {
+	public Page<Encadrant> listEncadrant(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return encadrantRepo.findAll(p).toList();
+		return encadrantRepo.findAll(p);
 	}
 
 	@Override
-	public List<Admin> listAdmin(int page) {
+	public Page<Admin> listAdmin(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return adminRepo.findAll(p).toList();
+		return adminRepo.findAll(p);
 	}
 
 	@Override
-	public List<Stage> listStage(int page) {
+	public Page<Stage> listStage(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return stageRepo.findAll(p).toList();
+		return stageRepo.findAll(p);
 	}
 
 	@Override
-	public List<Annonce> listAnnonce(int page) {
+	public Page<Annonce> listAnnonce(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return annonceRepo.findAll(p).toList();
+		return annonceRepo.findAll(p);
 	}
 
 	@Override
-	public List<Document> listDocuments(int page) {
+	public Page<Document> listDocuments(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return documentRepo.findAll(p).toList();
+		return documentRepo.findAll(p);
 	}
 
 	@Override
-	public List<EmplacementStage> listEmplacement(int page) {
+	public Page<EmplacementStage> listEmplacement(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return emplacementStageRepo.findAll(p).toList();
+		return emplacementStageRepo.findAll(p);
 	}
 
 	@Override
-	public List<Niveau> listNiveau(int page) {
+	public Page<Niveau> listNiveau(int page) {
 		Pageable p = PageRequest.of(page,10);
-		return niveauRepo.findAll(p).toList();
+		return niveauRepo.findAll(p);
 	}
 
 	@Override
@@ -144,10 +157,16 @@ public class AdminServiceImpl implements AdminService {
 		Optional<Niveau> niveau = niveauRepo.findById(id);
         return niveau.isPresent() ? niveau.get() : null;
 	}
+	
 
 	@Override
 	public Boolean ajouterEtudiant(Etudiant e) {
 		try {
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(roleRepo.findByNom("ETUDIANT"));
+			e.setRoles(roles);
+			e.setPassword(encoder.encode(e.getPassword()));
+			 
             etudiantRepo.save(e);
             return true;
 
@@ -162,6 +181,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Boolean ajouterEncadrant(Encadrant e) {
 		try {
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(roleRepo.findByNom("ENCADRANT"));
+			e.setRoles(roles);
+			e.setPassword(encoder.encode(e.getPassword()));
             encadrantRepo.save(e);
             return true;
 
@@ -176,6 +199,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Boolean ajouterAdmin(Admin a) {
 		try {
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(roleRepo.findByNom("ADMIN"));
+			a.setRoles(roles);
+			a.setPassword(encoder.encode(a.getPassword()));
             adminRepo.save(a);
             return true;
 
@@ -252,7 +279,8 @@ public class AdminServiceImpl implements AdminService {
 		existantEtudiant.setNom(e.getNom());
 		existantEtudiant.setPrenom(e.getPrenom());
 		existantEtudiant.setUsername(e.getUsername());
-		existantEtudiant.setPassword(e.getPassword());
+		
+		existantEtudiant.setNiveau(e.getNiveau());
 		try {
 			etudiantRepo.save(existantEtudiant);
 			return true;
@@ -270,8 +298,8 @@ public class AdminServiceImpl implements AdminService {
 		existantEncadrant.setNom(e.getNom());
 		existantEncadrant.setPrenom(e.getPrenom());
 		existantEncadrant.setUsername(e.getUsername());
-		existantEncadrant.setPassword(e.getPassword());
 		
+		existantEncadrant.setNiveau(e.getNiveau());
 		try {
 			encadrantRepo.save(existantEncadrant);
 			return true;
@@ -289,7 +317,7 @@ public class AdminServiceImpl implements AdminService {
 		existantAdmin.setNom(a.getNom());
 		existantAdmin.setPrenom(a.getPrenom());
 		existantAdmin.setUsername(a.getUsername());
-		existantAdmin.setPassword(a.getPassword());
+		
 		try {
 			adminRepo.save(existantAdmin);
 			return true;
@@ -301,19 +329,42 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Boolean modifierStage(Stage s) {
+	public Boolean modifierStage(StageDTO s) {
+		Niveau newNiv=niveauRepo.findById(s.getNiveau()).get();
+		List<Stage>stages=newNiv.getStages();
 		Stage existantStage  = stageRepo.findById(s.getId()).get();
+		Niveau oldNiv=getNiveauFromStage(existantStage);
+		
+		oldNiv.getStages().remove(existantStage);
+		niveauRepo.save(oldNiv);
+		newNiv.getStages().remove(existantStage);
+		niveauRepo.save(newNiv);
 		existantStage.setDuree(s.getDuree());
 		existantStage.setNom(s.getNom());
 		existantStage.setSujet(s.getSujet());
+		stages.add(existantStage);
+		newNiv.setStages(stages);
+		
+		
+		
+		
 		try {
-			stageRepo.save(existantStage);
-			return true;
-		}catch (Exception ex) {
-            // TODO: Switch to slf4j for logging
-            System.out.println("Unable to modify stage");
-            return false;
-        }
+			
+			    
+			    stageRepo.save(existantStage);
+			    niveauRepo.save(newNiv);
+				
+				return true;
+			}catch (Exception ex) {
+			    // TODO: Switch to slf4j for logging
+				
+			    System.out.println("Unable to modify stage");
+			    return false;
+			}
+		
+		
+		
+		
 	}
 
 	@Override
@@ -400,7 +451,11 @@ try {
 	public Boolean deleteStage(long id) {
 try {
 			
-            stageRepo.delete(stageRepo.findById(id).get());
+	Stage existantStage  = stageRepo.findById(id).get();
+	Niveau oldNiv=getNiveauFromStage(existantStage);
+	oldNiv.getStages().remove(existantStage);
+	niveauRepo.save(oldNiv);
+	stageRepo.delete(existantStage);
             return true;
 
         } catch (Exception ex) {
@@ -541,6 +596,95 @@ try {
 		            System.out.println(ex.getMessage());
 		            return false;
 		        }
+	}
+	@Override
+	public Page<Etudiant> searchStudents(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return etudiantRepo.searchStudentsNoLevel(search, p);
+	}
+
+	@Override
+	public Page<Encadrant> searchEncadrants(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return encadrantRepo.searchEncadrant(search, p);
+	}
+
+	@Override
+	public Page<Admin> searchAdmins(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return adminRepo.searchAdmins(search, p);
+	}
+
+	@Override
+	public Page<Annonce> searchAnnonce(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return annonceRepo.searchAnnonce(search, p);
+	}
+
+	@Override
+	public Page<Stage> searchStage(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return stageRepo.searchStage(search, p);
+	}
+
+	@Override
+	public Boolean ajouterEtudiants(List<Etudiant> e) {
+		String pass;
+		for(Etudiant etudiant : e) {
+			pass=Passgen.genPassword();
+			etudiant.setPassword(encoder.encode(pass));
+			etudiantRepo.save(etudiant);
+			es.sendSimpleMail(new EmailDetails(etudiant.getEmail(),"votre mot de pass est: "+pass," compte creer ",null));
+			
+		}
+		
+		return true;
+	}
+
+	@Override
+	public Boolean modifierNiveau(Niveau n) {
+		Niveau exNiveau=niveauRepo.findById(n.getId()).get();
+		exNiveau.setLibelle(n.getLibelle());
+		try {
+			niveauRepo.save(exNiveau);
+			return true;
+		}catch (Exception ex) {
+            // TODO: Switch to slf4j for logging
+            System.out.println("Unable to modify niveau");
+            return false;
+        }
+	}
+
+	@Override
+	public Boolean deleteNiveau(long id) {
+		niveauRepo.delete(niveauRepo.findById(id).get());
+		return null;
+	}
+
+	@Override
+	public Page<Niveau> searchNiveau(String search, int page) {
+		Pageable p = PageRequest.of(page, 10);
+		return niveauRepo.searchNiveau(search, p);
+	}
+
+	@Override
+	public Niveau getNiveauFromStage(Stage s) {
+		List<Niveau>ns=new ArrayList<Niveau>();
+		ns=niveauRepo.findAll();
+		for(Niveau n: ns) {
+			for(Stage ss: n.getStages()) {
+				if(ss.eq(s))
+					return n;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Page<EmplacementStage> searchEmpl(String search, int page) {
+	    
+		Pageable p = PageRequest.of(page, 10);
+		return emplacementStageRepo.searchEmpl(search, p);
 	}
 
 	
