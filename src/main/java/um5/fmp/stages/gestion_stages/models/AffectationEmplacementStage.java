@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -37,11 +39,12 @@ public class AffectationEmplacementStage {
     private Etudiant etudiant;
 
     @ManyToOne
+    @Nullable
     @JsonIgnoreProperties("affectationEmplacementStages")
     private Encadrant encadrant;
 
     @OneToMany
-    @JsonIgnoreProperties("{proprietaire}")
+    @JsonIgnoreProperties("proprietaire")
     private List<Document> documents;
     
     @ManyToOne

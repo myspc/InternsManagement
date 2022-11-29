@@ -12,13 +12,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
 import um5.fmp.stages.gestion_stages.models.Stage;
+
 import um5.fmp.stages.gestion_stages.repository.AdminRepository;
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.models.Admin;
@@ -95,9 +96,34 @@ public class GestionStagesApplication {
 		
 		
 		
-=======
-	  public ApplicationRunner dataLoader(EmailServiceImpl es,
-			  EtudiantRepository etudiantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,NiveauRepository niveauRepo ,RoleRepository roleRepo,PasswordEncoder encoder) {
+
+		
+		
+		/*Niveau niveau1 = niveauRepo.findById(Long.parseLong("7")).get();
+		Niveau niveau2 = niveauRepo.findById(Long.parseLong("8")).get();
+		Role role = roleRepo.findById(Long.parseLong("2")).get();
+		Role roleEncadrant = roleRepo.findById(Long.parseLong("6")).get();
+		Stage stage1 = stageRepo.findById(Long.parseLong("4")).get();
+		Stage stage2 = stageRepo.findById(Long.parseLong("5")).get();*/
+		
+		
+		/*Encadrant e1 = new Encadrant();
+		e1.setPrenom("Ahmed");
+		e1.setNom("Mohamed");
+		e1.setEmail("test@email.com");
+		e1.setPassword(encoder.encode("password"));
+		e1.setNiveau(niveau2);
+		e1.setUsername("Ahmed");
+
+		List<Role> roles2 = new ArrayList<Role>();
+		roles2.add(roleEncadrant);
+		e1.setRoles(roles2);
+		encadrantRepo.save(e1);*/
+		
+		
+		
+		
+		
 		/*Niveau niveau = niveauRepo.findById(Long.parseLong("6")).get();
 		Role role = roleRepo.findById(Long.parseLong("4")).get();
 		Etudiant e2 = new Etudiant();

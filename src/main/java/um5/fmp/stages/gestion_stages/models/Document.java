@@ -27,6 +27,6 @@ public class Document {
     private String type;
 
     @ManyToOne
-    @JsonIgnoreProperties("{documents}")
+    @JsonIgnoreProperties("documents")
     private Etudiant proprietaire;
 }
