@@ -162,10 +162,13 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Boolean ajouterEtudiant(Etudiant e) {
 		try {
+			String pass;
 			List<Role> roles = new ArrayList<Role>();
 			roles.add(roleRepo.findByNom("ETUDIANT"));
 			e.setRoles(roles);
-			e.setPassword(encoder.encode(e.getPassword()));
+			pass=Passgen.genPassword();
+			e.setPassword(encoder.encode(pass));
+			System.out.println(es.sendSimpleMail(new EmailDetails(e.getEmail(), "votre mot de passe "+pass, "compte creer ", null)));
 			 
             etudiantRepo.save(e);
             return true;
@@ -181,10 +184,14 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Boolean ajouterEncadrant(Encadrant e) {
 		try {
+			String pass;
 			List<Role> roles = new ArrayList<Role>();
 			roles.add(roleRepo.findByNom("ENCADRANT"));
 			e.setRoles(roles);
-			e.setPassword(encoder.encode(e.getPassword()));
+			pass=Passgen.genPassword();
+			e.setPassword(encoder.encode(pass));
+			System.out.println(es.sendSimpleMail(new EmailDetails(e.getEmail(), "votre mot de passe "+pass, "compte creer ", null)));
+			
             encadrantRepo.save(e);
             return true;
 
@@ -199,10 +206,13 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Boolean ajouterAdmin(Admin a) {
 		try {
+			String pass;
 			List<Role> roles = new ArrayList<Role>();
 			roles.add(roleRepo.findByNom("ADMIN"));
 			a.setRoles(roles);
-			a.setPassword(encoder.encode(a.getPassword()));
+			pass=Passgen.genPassword();
+			a.setPassword(encoder.encode(pass));
+			System.out.println(es.sendSimpleMail(new EmailDetails(a.getEmail(), "votre mot de passe "+pass, "compte creer ", null)));
             adminRepo.save(a);
             return true;
 

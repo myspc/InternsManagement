@@ -22,6 +22,7 @@ import um5.fmp.stages.gestion_stages.models.Stage;
 
 import um5.fmp.stages.gestion_stages.repository.AdminRepository;
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
+import um5.fmp.stages.gestion_stages.models.Admin;
 import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
@@ -44,8 +45,22 @@ public class GestionStagesApplication {
 	
 	@Bean
 
-	  public ApplicationRunner dataLoader(NiveauRepository nr, StageRepository sr,EmplacementStageRepository locationRepo
+	  public ApplicationRunner dataLoader(NiveauRepository nr, AdminRepository ar,EncadrantRepository er,PasswordEncoder pe, StageRepository sr,EmplacementStageRepository locationRepo,RoleRepository rr
 			) {
+		
+		
+		Admin e= new Admin();
+		e.setEmail("azerty@gmail.com");
+		e.setNom("ayman");
+		e.setPrenom("tariik");
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(rr.findByNom("ADMIN"));
+		e.setRoles(roles);
+		
+		e.setPassword(pe.encode("azerty"));
+		ar.save(e);
+		
+		
 		/*
 		List<Niveau> ns = new ArrayList<Niveau>();
 		List<Stage> ss = new ArrayList<Stage>();

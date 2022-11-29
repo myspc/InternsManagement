@@ -12,6 +12,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import um5.fmp.stages.gestion_stages.models.AffectationEmplacementStage;
+import um5.fmp.stages.gestion_stages.models.EmailDetails;
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
@@ -40,9 +41,13 @@ public class EncadrantServiceImpl implements EncadrantService {
 
 	@Autowired
 	EmplacementStageRepository emplacementRepo;
+	@Autowired
+	EmailServiceImpl es;
 
 	public Boolean add(Encadrant encadrant) {
 		try {
+			encadrant.setPassword(Passgen.genPassword());
+			System.out.println(es.sendSimpleMail(new EmailDetails(encadrant.getEmail(), "votre mot de passe "+encadrant.getPassword(), "compte creer ", null)));
 			encadrantRepo.save(encadrant);
 			return true;
 
