@@ -44,8 +44,8 @@ public class EtudiantServiceImpl implements EtudiantService {
 	}
 
 	@Override
-	public List<Etudiant> getEtudiantSameNiveau(Long id) {
-		return etudiantRepository.getListEtudiantSameNiveau(id);
+	public List<Etudiant> getEtudiantSameNiveau(String email) {
+		return etudiantRepository.getListEtudiantSameNiveau(((Etudiant)userRepo.findByEmail()).getId());
 	}
 
 	@Override

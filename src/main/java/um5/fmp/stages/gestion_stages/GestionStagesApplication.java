@@ -11,21 +11,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-<<<<<<< HEAD
+
 import um5.fmp.stages.gestion_stages.models.EmailDetails;
-=======
-
-
->>>>>>> 278dbe82a52ea9bac8abc91d5c4c1da3d10622b9
 import um5.fmp.stages.gestion_stages.models.EmplacementStage;
 import um5.fmp.stages.gestion_stages.models.Encadrant;
 import um5.fmp.stages.gestion_stages.models.Etudiant;
 import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
 import um5.fmp.stages.gestion_stages.models.Stage;
-<<<<<<< HEAD
-import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
-=======
+
 import um5.fmp.stages.gestion_stages.repository.AdminRepository;
 import um5.fmp.stages.gestion_stages.repository.EmplacementStageRepository;
 import um5.fmp.stages.gestion_stages.models.EmailDetails;
@@ -34,7 +28,6 @@ import um5.fmp.stages.gestion_stages.models.Niveau;
 import um5.fmp.stages.gestion_stages.models.Role;
 
 
->>>>>>> 278dbe82a52ea9bac8abc91d5c4c1da3d10622b9
 import um5.fmp.stages.gestion_stages.repository.EncadrantRepository;
 import um5.fmp.stages.gestion_stages.repository.EtudiantRepository;
 import um5.fmp.stages.gestion_stages.repository.NiveauRepository;
@@ -88,9 +81,6 @@ public class GestionStagesApplication {
 		
 		
 		
-=======
-	  public ApplicationRunner dataLoader(EmailServiceImpl es,
-			  EtudiantRepository etudiantRepo,EncadrantRepository encadrantRepo,EmplacementStageRepository locationRepo,StageRepository stageRepo,NiveauRepository niveauRepo ,RoleRepository roleRepo,PasswordEncoder encoder) {
 
 		
 		

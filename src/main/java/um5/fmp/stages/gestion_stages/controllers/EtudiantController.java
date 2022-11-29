@@ -41,8 +41,8 @@ public class EtudiantController {
 	}
 	
 	@GetMapping("/collegues")
-	public List<Etudiant> getStudentsSameClasse(@RequestParam("id") Long idNiveau){
-		return etudiantService.getEtudiantSameNiveau(idNiveau);
+	public List<Etudiant> getStudentsSameClasse(Principal principal){
+		return etudiantService.getEtudiantSameNiveau(principal.getName());
 	}
 	
 	@GetMapping("/encadrant")
